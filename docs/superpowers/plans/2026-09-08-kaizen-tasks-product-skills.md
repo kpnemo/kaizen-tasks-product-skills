@@ -69,8 +69,8 @@ Tasks 1 to 11 depend on nothing outside this repository. Task 12 (rubric vendori
 
 Interfaces this lane assumes about other lanes (all from the master plan section 4):
 
-- Rubric: `rubric/readiness.md` in `kpnemo/kaizen-tasks-assembly-line`, front matter with a `version:` line, sections per the assembly-line spec section 5 (Scales, Architecture change test, Readiness, Procedure, Clarifying questions), output shape `{ clarity, complexity, risk, archChange, readiness, reasons: { clarity, complexity, risk }, questions: [] }`. Raw URL `https://raw.githubusercontent.com/kpnemo/kaizen-tasks-assembly-line/<ref>/rubric/readiness.md`; local nested path `/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/webapp/rubric/readiness.md`.
-- Issue form fields, in order, from the assembly-line spec section 4.1: `problem`, `behavior`, `acceptance`, `out_of_scope`, `role`. The skills write these as the headings `### Problem`, `### Proposed behavior`, `### Acceptance criteria`, `### Out of scope`, `### Role`.
+- Rubric: `rubric/readiness.md` in `kpnemo/kaizen-tasks-assembly-line`, written by the assembly-line plan's Task 2. Front matter `version: 1` (an integer, not semver; it changes whenever an anchor, the formula, or the output shape changes). Headings, exactly: `## 1. Scales` with the tables `### Clarity`, `### Complexity`, `### Risk`; `## 2. Architecture change test`; `## 3. Readiness`; `## 4. Procedure` with `### Repo layouts used for scoring`; `## 5. Clarifying questions`. Formula in section 3: `readiness = clarity * 2 + (6 - complexity) + (6 - risk)`, range 4 to 20. Output shape from section 4, step 7: `{ clarity, complexity, risk, archChange, readiness, reasons: { clarity, complexity, risk }, questions: [] }`, where `questions` holds two or three clarifying questions only when clarity is below 3 and is empty otherwise. Raw URL `https://raw.githubusercontent.com/kpnemo/kaizen-tasks-assembly-line/<ref>/rubric/readiness.md`; local nested path `/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/webapp/rubric/readiness.md`.
+- Issue form fields, in order, from the assembly-line plan's Task 3 (`.github/ISSUE_TEMPLATE/feature-request.yml`): ids `problem`, `behavior`, `acceptance`, `out_of_scope`, `role` with labels `Problem`, `Proposed behavior`, `Acceptance criteria`, `Out of scope`, `Your role`; the first three required, the last two optional. GitHub renders a submitted form as `### <label>` sections, so the skills write exactly the headings `### Problem`, `### Proposed behavior`, `### Acceptance criteria`, `### Out of scope`, `### Your role`, which are also the headings of the assembly-line seeds and what its `triage-requests` skill reads. Feature requests are filed in `kpnemo/kaizen-tasks-assembly-line`, so a bare issue number means an issue there.
 - Labels applied by engineering triage only, never by these skills: `feature-request`, `clarity:1..5`, `complexity:1..5`, `risk:1..5`, `arch-change`, `triaged`, `implementing`, `shipped`, `triage-board`.
 
 ---
@@ -345,6 +345,7 @@ chore: scaffold repository with npm scripts and skill front matter check
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
+/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
 
 Expected: `git status --short` prints nothing afterwards; `git log --oneline -1` shows the subject above.
@@ -425,6 +426,7 @@ feat: add plugin manifest
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
+/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
 
 ---
@@ -436,15 +438,15 @@ MSG
 - Test: `npm test` (front matter check turns green here)
 
 **Interfaces:**
-- Consumes: `rubric/readiness.md` (Task 12) at `${CLAUDE_PLUGIN_ROOT}/rubric/readiness.md` or `rubric/readiness.md` under the project root; its front matter `version:` line; its sections Scales, Architecture change test, Readiness, Procedure, Clarifying questions; its output shape `{ clarity, complexity, risk, archChange, readiness, reasons: { clarity, complexity, risk }, questions: [] }`. `scripts/sync-rubric.sh` (Task 12) named in the missing-rubric message. `gh` CLI when present.
-- Produces: slash command `/refine-request`, invoked with `$ARGUMENTS`. The report's five headings `### Problem`, `### Proposed behavior`, `### Acceptance criteria`, `### Out of scope`, `### Role`; the `synthesize-interviews` skill (Task 4) hands candidates to this skill as pasted text and uses the same headings. First output line `Rubric version: <value>`.
+- Consumes: `rubric/readiness.md` (Task 12) at `${CLAUDE_PLUGIN_ROOT}/rubric/readiness.md` or `rubric/readiness.md` under the project root; its front matter `version:` line; its sections `## 1. Scales` (tables `### Clarity`, `### Complexity`, `### Risk`), `## 2. Architecture change test`, `## 3. Readiness` (`readiness = clarity * 2 + (6 - complexity) + (6 - risk)`), `## 4. Procedure`, `## 5. Clarifying questions`; its output shape `{ clarity, complexity, risk, archChange, readiness, reasons: { clarity, complexity, risk }, questions: [] }`. `scripts/sync-rubric.sh` (Task 12) named in the missing-rubric message. `gh` CLI when present; feature-request issues live in `kpnemo/kaizen-tasks-assembly-line`.
+- Produces: slash command `/refine-request`, invoked with `$ARGUMENTS`. The report's five headings `### Problem`, `### Proposed behavior`, `### Acceptance criteria`, `### Out of scope`, `### Your role`; the `synthesize-interviews` skill (Task 4) hands candidates to this skill as pasted text and uses the same headings. First output line `Rubric version: <value>`.
 
 - [ ] **Step 1: Confirm the check fails for the missing skill**
 
 Run:
 
 ```bash
-cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && npm test; echo "exit=$?"
+cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && nvm use >/dev/null && npm test; echo "exit=$?"
 ```
 
 Expected: `FAIL: no skills found under skills/`, `exit=1`.
@@ -477,13 +479,13 @@ If neither exists, stop and print exactly: `The readiness rubric is missing. Fro
 
 Take the value of the `version:` line in the rubric's front matter. Print `Rubric version: <value>` as the first line of the reply, and repeat it in the final report.
 
-Follow the rubric's Procedure section as written every time a score is produced. Do not shorten, reorder, or paraphrase it. The rubric's Scales, Architecture change test, and Readiness sections are the only definitions of clarity, complexity, risk, architecture change, and readiness used here. Produce the rubric's output shape (`clarity`, `complexity`, `risk`, `archChange`, `readiness`, `reasons`, `questions`) internally for every score; show it only in the tables below.
+Follow the rubric's Procedure section (`## 4. Procedure`) as written every time a score is produced. Do not shorten, reorder, or paraphrase it. The rubric's Scales section (`## 1. Scales`, tables `### Clarity`, `### Complexity`, `### Risk`), its Architecture change test (`## 2.`), and its Readiness section (`## 3.`, `readiness = clarity * 2 + (6 - complexity) + (6 - risk)`, range 4 to 20) are the only definitions of clarity, complexity, risk, architecture change, and readiness used here. Produce the rubric's output shape `{ clarity, complexity, risk, archChange, readiness, reasons: { clarity, complexity, risk }, questions: [] }` internally for every score; show it only in the tables below. The rubric's `questions` array (two or three, only while clarity is below 3, from `## 5. Clarifying questions`) is material for the interview in Step 4, not a limit on it: the interview keeps asking one question at a time past clarity 3 until the stop condition in Step 4, up to eight questions.
 
 ## Step 2. Take in the request
 
 Decide the source from the text after the command, checking in this order:
 
-1. **Only digits** (for example `17`): a GitHub issue number. Run `gh auth status` first. If `gh` is not installed or not logged in, say so in one line and ask for the issue text to be pasted instead. Otherwise run `gh issue view <n> --json title,body` and use `title` and `body` as the request. Remember the number for Step 6.
+1. **Only digits** (for example `17`), or a GitHub issue URL (`https://github.com/<owner>/<repo>/issues/<n>`): a GitHub issue. Digits alone mean an issue in `kpnemo/kaizen-tasks-assembly-line`, where feature requests are filed. Run `gh auth status` first. If `gh` is not installed or not logged in, say so in one line and ask for the issue text to be pasted instead. Otherwise run `gh issue view <n> --repo kpnemo/kaizen-tasks-assembly-line --json title,body,author,url` (or `gh issue view <url> --json title,body,author,url` for a URL) and use `title` and `body` as the request. Then run `gh api user -q .login` and note whether it equals `author.login`. Remember the issue number, its repository, and that yes-or-no answer for Step 6.
 2. **A path to an existing file** (for example `data/prd-sample.md` or `~/requests/export.md`): read the file and use its contents as the request.
 3. **Anything else**: the text itself is the request.
 4. **Nothing**: ask `Paste the request, or give me an issue number or a file path.` and wait. Then apply the three rules above to the reply.
@@ -496,7 +498,7 @@ Score the request with the rubric procedure. Show the result as the "before" row
 
 | | Clarity | Complexity | Risk | Architecture change | Readiness |
 |---|---|---|---|---|---|
-| Before | 2, a goal with no observable behavior | 3, both repos would change | 2, isolated behavior | no | 13 |
+| Before | 2, a goal with no observable behavior | 3, both repos would change | 2, isolated behavior | no | 11 |
 
 Keep this row; the final report reuses it.
 
@@ -553,8 +555,8 @@ Print, in this order:
    ### Out of scope
    - One bullet per excluded item, or `Nothing stated` when the PM chose to leave it open.
 
-   ### Role
-   The PM's role in one line, taken from the answers or the request.
+   ### Your role
+   The PM's role in one line, taken from the answers or the request, or `Not stated`. The form leaves this field optional.
    ```
 
    Use only what the PM said or the request contained. Do not invent criteria, users, or numbers. Where the PM gave a number, keep the number.
@@ -563,8 +565,8 @@ Print, in this order:
 
    | | Clarity | Complexity | Risk | Architecture change | Readiness |
    |---|---|---|---|---|---|
-   | Before | 2, a goal with no observable behavior | 3, both repos would change | 2, isolated behavior | no | 13 |
-   | After | 4, testable criteria and scope stated | 3, both repos would change | 2, isolated behavior | no | 17 |
+   | Before | 2, a goal with no observable behavior | 3, both repos would change | 2, isolated behavior | no | 11 |
+   | After | 4, testable criteria and scope stated | 3, both repos would change | 2, isolated behavior | no | 15 |
 
 4. One sentence naming the single answer that moved the score most, for example `Naming the three tester checks moved clarity from 2 to 4.`
 
@@ -572,7 +574,8 @@ Print, in this order:
 
 ## Step 6. Offer to write it back
 
-- If the request came from an issue and `gh` is logged in: ask, through the question tool when available, `Update issue #<n> with this body?` with options `Yes, replace the body` and `No, I will paste it myself`. On yes, write the five sections to a temporary file and run `gh issue edit <n> --body-file <file>`, then print the issue URL. Any author can edit their own issue; no repository permission is needed.
+- If the request came from an issue, `gh` is logged in, and the signed-in login equals the issue's `author.login` (checked in Step 2): ask, through the question tool when available and as a two-item numbered list otherwise, `Update issue #<n> with this body?` with options `Yes, replace the body` and `No, I will paste it myself`. On yes, write the five sections to a temporary file and run `gh issue edit <n> --repo <owner/repo> --body-file <file>` with the repository noted in Step 2, then print the issue URL. Any author can edit their own issue; no repository permission is needed.
+- If the request came from an issue that someone else opened: do not offer the edit. Say `Issue #<n> was opened by <author.login>; only its author can replace its body from here. Paste the five sections into the issue yourself, or into your own tracker.`
 - Otherwise say where to paste it: `Paste the five sections into the Feature request form of the kaizen-tasks-assembly-line repository, or into your own tracker.`
 
 Never apply labels, never comment on the issue, never change its title or state. Labels (`clarity:1..5`, `complexity:1..5`, `risk:1..5`, `arch-change`, `triaged`) and clarifying comments belong to the engineering triage skill.
@@ -591,7 +594,7 @@ Never apply labels, never comment on the issue, never change its title or state.
 Run:
 
 ```bash
-cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && npm test; echo "exit=$?"
+cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && nvm use >/dev/null && npm test; echo "exit=$?"
 ```
 
 Expected: `ok: skills/refine-request/SKILL.md (refine-request)` and `exit=0`.
@@ -599,10 +602,10 @@ Expected: `ok: skills/refine-request/SKILL.md (refine-request)` and `exit=0`.
 Also confirm the fixed strings the spec requires are present:
 
 ```bash
-cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && grep -c 'gh issue edit' skills/refine-request/SKILL.md && grep -c 'The cap is eight' skills/refine-request/SKILL.md && grep -c '^ *### Problem$' skills/refine-request/SKILL.md
+cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && grep -c 'gh issue edit' skills/refine-request/SKILL.md && grep -c 'The cap is eight' skills/refine-request/SKILL.md && grep -c '^ *### Problem$' skills/refine-request/SKILL.md && grep -cF 'readiness = clarity * 2 + (6 - complexity) + (6 - risk)' skills/refine-request/SKILL.md && grep -c -- '--repo kpnemo/kaizen-tasks-assembly-line' skills/refine-request/SKILL.md
 ```
 
-Expected: `1`, `1`, `1` (the heading sits in an indented code block, hence the leading-space allowance).
+Expected: `1`, `1`, `1`, `1`, `1` (the heading sits in an indented code block, hence the leading-space allowance; the last two confirm the rubric formula is cited and the issue lookup targets the assembly-line repository).
 
 - [ ] **Step 4: Changelog bullet**
 
@@ -621,6 +624,7 @@ feat: add refine-request skill
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
+/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
 
 ---
@@ -640,7 +644,7 @@ MSG
 Run:
 
 ```bash
-cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && npm test | wc -l
+cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && bash scripts/check-skills.sh | wc -l
 ```
 
 Expected: `1` (only `refine-request` is listed).
@@ -671,7 +675,7 @@ Read the rubric before the transcripts. Look in this order and use the first fil
 
 If neither exists, stop and print exactly: `The readiness rubric is missing. From the repo root run scripts/sync-rubric.sh, then run /synthesize-interviews again.`
 
-Take the value of the `version:` line in the rubric's front matter. Print `Rubric version: <value>` as the first line of the reply and write it into the output file. When scoring a candidate request in Step 5, follow the rubric's Procedure section as written; the rubric's Scales, Architecture change test, and Readiness sections are the only definitions used.
+Take the value of the `version:` line in the rubric's front matter. Print `Rubric version: <value>` as the first line of the reply and write it into the output file. When scoring a candidate request in Step 5, follow the rubric's Procedure section (`## 4. Procedure`) as written and produce its output shape `{ clarity, complexity, risk, archChange, readiness, reasons: { clarity, complexity, risk }, questions: [] }` internally; the rubric's Scales section (`## 1. Scales`, tables `### Clarity`, `### Complexity`, `### Risk`), its Architecture change test (`## 2.`), and its Readiness section (`## 3.`, `readiness = clarity * 2 + (6 - complexity) + (6 - risk)`, range 4 to 20) are the only definitions used.
 
 ## Step 2. Collect the transcripts
 
@@ -693,7 +697,7 @@ For each transcript, in its own pass and before looking at the others, write dow
 
 - Merge pains that describe the same thing under one name; keep every transcript's quotes under it.
 - **Frequency** of a pain: the number of transcripts in which it appears, out of the number read, written `2 of 3`.
-- **Severity** of a pain: 1 to 5 in the style of the rubric's risk anchors, applied to the customer's job:
+- **Severity** of a pain: 1 to 5 in the style of the rubric's `### Risk` table under `## 1. Scales`, applied to the customer's job instead of the codebase:
   1. cosmetic: an annoyance the person mentions and moves on from;
   2. slows one task; no workaround needed;
   3. forces a workaround (a spreadsheet, a text file, an email thread) every day or every week;
@@ -711,7 +715,7 @@ For the top two or three opportunities, write one feature request each in the re
 ### Proposed behavior
 ### Acceptance criteria
 ### Out of scope
-### Role
+### Your role
 ```
 
 - Problem: two to four sentences with at least one verbatim quote and the frequency.
@@ -720,7 +724,7 @@ For the top two or three opportunities, write one feature request each in the re
 - Out of scope: at least one bullet naming a nearby thing this request does not include.
 - Role: the persona whose job the request serves.
 
-Score each candidate with the rubric procedure and show the result under it as one line: `Score: clarity 4, complexity 3, risk 2, architecture change no, readiness 17`. Write candidates to score clarity 4 where the transcripts give enough detail; do not invent detail to reach it. When a candidate triggers the rubric's architecture change test, say so in the score line; it still goes in the list.
+Score each candidate with the rubric procedure and show the result under it as one line: `Score: clarity 4, complexity 3, risk 2, architecture change no, readiness 15`. Aim each candidate at the bar `refine-request` stops at: clarity 4 or higher, scope stated (the Out of scope section filled), and at least three acceptance criteria a tester could check. Write to that bar where the transcripts give enough detail; do not invent detail to reach it. When a candidate falls short, add one line `Still missing: <what the transcripts could not supply>` under the score line. When a candidate triggers the rubric's architecture change test, say so in the score line; it still goes in the list.
 
 ## Step 6. Write the file and print the table
 
@@ -749,7 +753,7 @@ Then print to the chat: the rubric version, the file path, and the opportunity t
 
 ## Step 7. Offer the next step
 
-Ask, through the question tool when available: `Refine one of the candidates now?` with one option per candidate title plus `Not now`. On a choice, run the `refine-request` skill with that candidate's five sections as the pasted text (`/refine-request` followed by the text). Do not run it unasked.
+Ask, through the question tool when available and as a numbered list in plain text otherwise: `Refine one of the candidates now?` with one option per candidate title plus `Not now`. On a choice, run the `refine-request` skill with that candidate's five sections as the pasted text (`/refine-request` followed by the text). Do not run it unasked.
 
 ## Rules
 
@@ -757,6 +761,7 @@ Ask, through the question tool when available: `Refine one of the candidates now
 - Every pain, opportunity, and candidate points back to at least one transcript by file name.
 - Plain language and no engineering words in the candidates; the reader is a PM who will paste them into a form.
 - Print the rubric version used, in the file and in the chat.
+- This skill never touches GitHub: it opens no issues, applies no labels, and posts no comments. Filing is the PM's step, and labels belong to engineering triage.
 ````
 
 - [ ] **Step 3: Run the check**
@@ -764,7 +769,7 @@ Ask, through the question tool when available: `Refine one of the candidates now
 Run:
 
 ```bash
-cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && npm test; echo "exit=$?"
+cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && nvm use >/dev/null && npm test; echo "exit=$?"
 ```
 
 Expected:
@@ -778,7 +783,7 @@ exit=0
 Also confirm the two skills use the same five headings:
 
 ```bash
-cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && for h in 'Problem' 'Proposed behavior' 'Acceptance criteria' 'Out of scope' 'Role'; do printf '%s: ' "$h"; grep -l "^ *### $h\$" skills/*/SKILL.md | wc -l; done
+cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && for h in 'Problem' 'Proposed behavior' 'Acceptance criteria' 'Out of scope' 'Your role'; do printf '%s: ' "$h"; grep -l "^ *### $h\$" skills/*/SKILL.md | wc -l; done
 ```
 
 Expected: each heading followed by `2`.
@@ -800,6 +805,7 @@ feat: add synthesize-interviews skill
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
+/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
 
 ---
@@ -1149,6 +1155,7 @@ feat: add synthetic supervisor interview transcript
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
+/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
 
 ---
@@ -1169,7 +1176,7 @@ Planted content to verify after writing (spec section 6):
 |---|---|
 | Switching between five tools per interaction | `Five windows, two monitors, one customer`; `I copy the claim number four times on a normal call`; `Alt-tab is the most used key on my keyboard` |
 | Knowledge base out of date | `Compass says thirty days, the policy document says forty-five, and the customer's contract says sixty`; `I keep my own notes in a text file` |
-| Wrap-up codes feel arbitrary | `There are forty-one codes and I use six`; `whichever I click first wins`; `Nobody has ever told me what the codes are for` |
+| Wrap-up codes feel arbitrary | `There are forty-one codes and I use six`; `Whichever I click first wins`; `Nobody has ever told me what the codes are for` |
 | Contradiction with 01 | Marcus codes to match how the call started because the supervisor spot-checks: `I pick the code that matches how the call started` |
 
 - [ ] **Step 1: Run the count check and see it fail**
@@ -1472,7 +1479,7 @@ Marcus: Thanks. If you build the open-the-customer thing, I will test it.
 Run:
 
 ```bash
-cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && f=data/interviews/02-agent.md && n=$(grep -c '^Interviewer:' "$f") && echo "exchanges=$n" && test "$n" -ge 60 -a "$n" -le 90 && test "$n" -eq "$(grep -c '^Marcus:' "$f")" && for p in 'Five windows, two monitors, one customer' 'I copy the claim number four times on a normal call' 'Alt-tab is the most used key on my keyboard' "Compass says thirty days, the policy document says forty-five, and the customer's contract says sixty" 'I keep my own notes in a text file' 'There are forty-one codes and I use six' 'whichever I click first wins' 'Nobody has ever told me what the codes are for' 'I pick the code that matches how the call started'; do grep -qF "$p" "$f" && echo "found: $p"; done; echo "exit=$?"
+cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && f=data/interviews/02-agent.md && n=$(grep -c '^Interviewer:' "$f") && echo "exchanges=$n" && test "$n" -ge 60 -a "$n" -le 90 && test "$n" -eq "$(grep -c '^Marcus:' "$f")" && for p in 'Five windows, two monitors, one customer' 'I copy the claim number four times on a normal call' 'Alt-tab is the most used key on my keyboard' "Compass says thirty days, the policy document says forty-five, and the customer's contract says sixty" 'I keep my own notes in a text file' 'There are forty-one codes and I use six' 'Whichever I click first wins' 'Nobody has ever told me what the codes are for' 'I pick the code that matches how the call started'; do grep -qF "$p" "$f" && echo "found: $p"; done; echo "exit=$?"
 ```
 
 Expected: `exchanges=66`, then nine `found:` lines, then `exit=0`. The exact count is 66 as written above; any value from 60 to 90 passes.
@@ -1494,6 +1501,7 @@ feat: add synthetic agent interview transcript
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
+/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
 
 ---
@@ -1847,6 +1855,7 @@ feat: add synthetic workforce planner interview transcript
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
+/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
 
 ---
@@ -1969,6 +1978,7 @@ feat: add sample PRD at clarity 3
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
+/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
 
 ---
@@ -2107,7 +2117,7 @@ Collect nothing. Photograph the canvases if a group wants a copy. The plan stays
 Run:
 
 ```bash
-cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && npm run lint:md 2>&1 | tail -3; echo "exit=$?"
+cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && nvm use >/dev/null && npm run lint:md 2>&1 | tail -3; echo "exit=$?"
 ```
 
 Expected: `Linting: 3 files`, `Summary: 0 issues in 0 files`, `exit=0`. (`README.md` does not exist until Task 11; the glob for it matches nothing and that is not an error.)
@@ -2137,6 +2147,7 @@ feat: add Part 3 canvas, plan, and facilitator templates
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
+/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
 
 ---
@@ -2269,7 +2280,7 @@ Expected: `scripts/build-pdf.mjs` printed once (Prettier lists the file it forma
 Run:
 
 ```bash
-cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && npm run pdf; echo "exit=$?"
+cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && nvm use >/dev/null && npm run pdf; echo "exit=$?"
 ```
 
 Expected:
@@ -2308,7 +2319,7 @@ open templates/part3/agentic-layer-canvas.pdf templates/part3/plan-30-60-90.pdf
 Run:
 
 ```bash
-cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && npm run lint:js && npm run typecheck; echo "exit=$?"
+cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && nvm use >/dev/null && npm run lint:js && npm run typecheck; echo "exit=$?"
 ```
 
 Expected: `Checking formatting...`, `All matched files use Prettier code style!`, nothing from ESLint, nothing from `tsc`, `exit=0`.
@@ -2330,6 +2341,7 @@ feat: build Part 3 PDFs with Playwright Chromium
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
+/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
 
 ---
@@ -2376,7 +2388,7 @@ The skills need no install step. `npm install` is only for rebuilding the PDFs a
 
 ### `/refine-request <issue number | file path | pasted text>`
 
-Scores a feature request with the rubric, asks one question at a time until it would score as ready, and returns the request rewritten in the five sections of the engineering issue form with a before-and-after score. Example: `/refine-request data/prd-sample.md`. With an issue number and a logged-in `gh`, it offers to update your own issue; it never applies labels or comments.
+Scores a feature request with the rubric, asks one question at a time until it would score as ready, and returns the request rewritten in the five sections of the engineering issue form with a before-and-after score. Example: `/refine-request data/prd-sample.md`. With an issue number from `kaizen-tasks-assembly-line` (or an issue URL) and a logged-in `gh`, it offers to update your own issue; it never applies labels or comments.
 
 ### `/synthesize-interviews <transcript paths...>`
 
@@ -2407,7 +2419,7 @@ Distribution goes through the company Claude marketplace and Enterprise connecto
 Run:
 
 ```bash
-cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && npm run lint:md 2>&1 | tail -2 && wc -w < README.md
+cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && nvm use >/dev/null && npm run lint:md 2>&1 | tail -2 && wc -w < README.md
 ```
 
 Expected: `Linting: 4 files`, `Summary: 0 issues in 0 files`, and a word count under 520 (one printed page).
@@ -2429,6 +2441,7 @@ docs: add README for product managers
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
+/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
 
 ---
@@ -2453,7 +2466,7 @@ Run:
 test -f /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/webapp/rubric/readiness.md && grep -m1 '^version:' /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/webapp/rubric/readiness.md && git -C /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/webapp log --oneline -1 -- rubric/readiness.md
 ```
 
-Expected: a `version: <v>` line (for example `version: 1.0.0`) and one commit line. If the file is missing or has no `version:` line, L4-M1 has not landed: stop this lane here and report "L5 waiting on L4-M1". Do not write a rubric in this repository.
+Expected: a `version: <v>` line (for example `version: 1`) and one commit line. If the file is missing or has no `version:` line, L4-M1 has not landed: stop this lane here and report "L5 waiting on L4-M1". Do not write a rubric in this repository.
 
 - [ ] **Step 2: Run the check and see the script is missing**
 
@@ -2604,7 +2617,7 @@ Run:
 cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && scripts/sync-rubric.sh --check --local /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/webapp/rubric/readiness.md; echo "exit=$?"
 ```
 
-Expected: `rubric up to date: version <v>` (the same `<v>` as Step 1, for example `1.0.0`) and `exit=0`.
+Expected: `rubric up to date: version <v>` (the same `<v>` as Step 1, for example `1`) and `exit=0`.
 
 - [ ] **Step 6: Drift check, drifted case**
 
@@ -2636,15 +2649,17 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 
 Expected: first, `warning: rubric drift check skipped: could not download https://raw.githubusercontent.com/kpnemo/kaizen-tasks-assembly-line/no-such-ref/rubric/readiness.md` and `exit=0`. Then, if the assembly-line repo exists on GitHub (L3-M0 done), `kaizen-tasks-assembly-line` followed by `rubric up to date: version <v>` and `exit=0`; if it does not exist yet, nothing more and `exit=1` from `gh`, which is fine.
 
-- [ ] **Step 9: Confirm the skills name the rubric's sections correctly**
+- [ ] **Step 9: Confirm the skills name the rubric's sections, formula, and output shape correctly**
 
 Run:
 
 ```bash
-cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && grep -n '^## \|^### ' rubric/readiness.md && grep -o 'clarity, complexity, risk, archChange, readiness' rubric/readiness.md | head -n1
+cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && grep -n '^## \|^### ' rubric/readiness.md && grep -cF 'readiness = clarity * 2 + (6 - complexity) + (6 - risk)' rubric/readiness.md && for k in clarity complexity risk archChange readiness reasons questions; do grep -q "\"$k\":" rubric/readiness.md && printf '%s ' "$k"; done; echo
 ```
 
-Expected: headings that contain, in some numbering, the words `Scales`, `Architecture change test`, `Readiness`, `Procedure`, and `Clarifying questions`, and the output-shape text. The two skills refer to "the rubric's Procedure section", "the rubric's Scales, Architecture change test, and Readiness sections", and "the rubric's risk anchors". If a heading uses different words (for example `Scoring` instead of `Scales`), edit those references in `skills/refine-request/SKILL.md` (Step 1 paragraph three) and `skills/synthesize-interviews/SKILL.md` (Step 1 last sentence and Step 4 "Severity") to the heading text actually used, and run `npm test` again. Do not edit the rubric.
+Expected, as the assembly-line plan's Task 2 writes the file: the headings `## 1. Scales`, `### Clarity`, `### Complexity`, `### Risk`, `## 2. Architecture change test`, `## 3. Readiness`, `## 4. Procedure`, `### Repo layouts used for scoring`, `## 5. Clarifying questions` in that order; then `1` (the formula line is present once); then `clarity complexity risk archChange readiness reasons questions` (the seven keys of the output shape in the JSON example under Procedure).
+
+Both skills cite these by name: `skills/refine-request/SKILL.md` Step 1 paragraph three and `skills/synthesize-interviews/SKILL.md` Step 1 last paragraph name the five sections, the three scale tables, the formula, and the output shape; `synthesize-interviews` Step 4 names the `### Risk` table. If the vendored file's headings, formula, or JSON keys differ from what the skills cite (a later rubric version may renumber a section or change the formula), edit those citations in the two skills to match the file, run `npm test` again, and mention the change in the Task 12 changelog bullet. Do not edit the rubric.
 
 - [ ] **Step 10: Changelog bullet**
 
@@ -2665,6 +2680,7 @@ feat: vendor readiness rubric with sync and drift check script
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
+/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
 
 (`git add` on the two SKILL.md files is a no-op when Step 9 changed nothing.)
@@ -2770,6 +2786,7 @@ ci: add workflow with front matter, rubric drift, PDF, and lint checks
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
+/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
 
 - [ ] **Step 6: Push to `develop` and watch the first run (when the GitHub repo exists)**
@@ -2797,6 +2814,7 @@ docs: record P3 verification from the first CI run
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
+/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
 
 ---
@@ -2845,7 +2863,7 @@ Expected transcript, in order (wording may vary; the checks in Step 4 are what m
 2. A "Before" table whose Clarity cell is `3` with a reason that says the behavior is described but the acceptance criteria are not testable. Complexity, risk, architecture change, and readiness may vary with the rubric text; note them.
 3. The first question is about **done criteria**, not about the user or the behavior, because sections 4 and 5 of the PRD already answer those and section 6 states out of scope. It arrives through the AskUserQuestion tool with three or four options drawn from the PRD, for example `Opening the page for a team of 12 shows every agent with at least one contact reason below the team`, `Each flagged reason shows three example interactions that open in one click`, `System wait time is shown separately from talk time on each example`, `Marking an example as not useful removes it from the list`. Pick one.
 4. Two more done-criteria questions, each with new options, until three criteria exist. Then possibly one complexity probe such as `Does this need information we do not store today?` (the PRD's last open question implies new data). Answer `No, what we have already`.
-5. The skill stops: it prints `Rubric version: <v>`, the five sections `### Problem`, `### Proposed behavior`, `### Acceptance criteria` (three or more bullets, each one you chose), `### Out of scope` (the three items from PRD section 6), `### Role` (`Team supervisor` or the product owner, taken from the text), then the Before/After table with After clarity `4` and a higher readiness, then one sentence such as `Naming the three tester checks moved clarity from 3 to 4.`, then `Paste the five sections into the Feature request form of the kaizen-tasks-assembly-line repository, or into your own tracker.`
+5. The skill stops: it prints `Rubric version: <v>`, the five sections `### Problem`, `### Proposed behavior`, `### Acceptance criteria` (three or more bullets, each one you chose), `### Out of scope` (the three items from PRD section 6), `### Your role` (`Team supervisor` or the product owner, taken from the text), then the Before/After table with After clarity `4` and a higher readiness, then one sentence such as `Naming the three tester checks moved clarity from 3 to 4.`, then `Paste the five sections into the Feature request form of the kaizen-tasks-assembly-line repository, or into your own tracker.`
 6. No `gh issue edit` offer, because the source was a file. No labels mentioned as applied.
 
 Total questions asked: between three and five. If the first question asks who the user is, the skill's "never ask what is already answered" rule is not being followed; that is a defect to fix in `skills/refine-request/SKILL.md` Step 4 before recording P1.
@@ -2873,6 +2891,7 @@ fix: add .claude/skills symlink layer so skills load when the repo is opened dir
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
+/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
 
 Then repeat Step 1 and Step 2. Also confirm the plugin shape itself loads, which is the marketplace path: `claude --plugin-dir "${TMPDIR:-/tmp}/p1-check/kaizen-tasks-product-skills"` from any other folder, then `/` should list the skills, possibly namespaced as `/kaizen-tasks-product-skills:refine-request`.
@@ -2898,7 +2917,7 @@ Expected: the file path; `5` (the five `##` sections); `2` or `3` candidates; `1
 Also confirm each candidate carries the five headings and a score line:
 
 ```bash
-cd "${TMPDIR:-/tmp}/p1-check/kaizen-tasks-product-skills" && f="$(ls out/*-synthesis.md | head -n1)" && for h in 'Problem' 'Proposed behavior' 'Acceptance criteria' 'Out of scope' 'Role'; do printf '%s: %s\n' "$h" "$(grep -c "^### $h\$" "$f")"; done && grep -c '^Score: clarity [1-5], complexity [1-5], risk [1-5], architecture change \(yes\|no\), readiness [0-9]*' "$f"
+cd "${TMPDIR:-/tmp}/p1-check/kaizen-tasks-product-skills" && f="$(ls out/*-synthesis.md | head -n1)" && for h in 'Problem' 'Proposed behavior' 'Acceptance criteria' 'Out of scope' 'Your role'; do printf '%s: %s\n' "$h" "$(grep -c "^### $h\$" "$f")"; done && grep -c '^Score: clarity [1-5], complexity [1-5], risk [1-5], architecture change \(yes\|no\), readiness [0-9]*' "$f"
 ```
 
 Expected: each heading with the same count as the number of candidates, and the score-line count equal to that number.
@@ -2919,6 +2938,7 @@ docs: record P1 verification from a fresh clone
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
+/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
 
 - [ ] **Step 6: Check the L5-M1 condition and report**
@@ -2929,7 +2949,7 @@ The master plan's L5-M1 is done when `/refine-request` and `/synthesize-intervie
 cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git status --short && git log --oneline develop | head -n 20 && test -s templates/part3/agentic-layer-canvas.pdf && test -s templates/part3/plan-30-60-90.pdf && echo "pdfs present" && (gh run list --workflow ci --branch develop --limit 1 2>/dev/null || echo "no GitHub remote yet")
 ```
 
-Expected: an empty status, one commit per task in this plan plus the P1 and P3 records (fifteen to seventeen from this plan, after the three earlier commits: init, spec, plan), `pdfs present`, and either a `completed  success` run row or `no GitHub remote yet`. Report L5-M1 as done only with the green run; otherwise report "L5-M1 pending CI run after L3-M0" and the clone-to-refined-request timing. P2 (Claude Desktop and Cowork) stays with Mike per the spec; remind him in the report.
+Expected: an empty status, one commit per task in this plan plus the P1 and P3 records (fifteen to seventeen from this plan, after the four earlier commits: init, spec, plan, review fixes), `pdfs present`, and either a `completed  success` run row or `no GitHub remote yet`. Report L5-M1 as done only with the green run; otherwise report "L5-M1 pending CI run after L3-M0" and the clone-to-refined-request timing. P2 (Claude Desktop and Cowork) stays with Mike per the spec; remind him in the report.
 
 ---
 
@@ -2958,4 +2978,4 @@ Deliberate deviations, each small and stated where it happens: CI also runs on p
 
 **2. Placeholder scan.** Searched the plan for `TBD`, `TODO`, `implement later`, `fill in`, `similar to Task`, and `appropriate`; none remain. The only angle-bracket tokens are values that come from outside this repository at run time and are named as such: `<v>` (the upstream rubric version, first read in Task 12 Step 1), `<date>` and `<m>` (recorded during the P1 run), `<url>` and `<id>` (the CI run), and the `<n>` issue number inside the skill text where it is the skill's own notation.
 
-**3. Consistency.** Script names and flags match everywhere: `scripts/check-skills.sh` (Tasks 1, 3, 4, 13), `scripts/sync-rubric.sh` with `[ref]`, `--local <path>`, `--check` (Tasks 11, 12, 13, and the skills' missing-rubric message in 3 and 4), `scripts/build-pdf.mjs` via `npm run pdf` (Tasks 1, 10, 11, 13). The five headings `### Problem`, `### Proposed behavior`, `### Acceptance criteria`, `### Out of scope`, `### Role` are identical in Tasks 3, 4, and the checks in 4 and 14. The quote line format `> "<quote>" — <role>, <file name>` defined in Task 4 is what Task 14's verbatim check parses. The transcript header row `Role` named in Task 5 is what Task 4 Step 2 reads. Persona names, company, sites, and system names are the same across Tasks 5 to 8. Versions are pinned identically in `package.json` (Task 1) and named in the header.
+**3. Consistency.** Script names and flags match everywhere: `scripts/check-skills.sh` (Tasks 1, 3, 4, 13), `scripts/sync-rubric.sh` with `[ref]`, `--local <path>`, `--check` (Tasks 11, 12, 13, and the skills' missing-rubric message in 3 and 4), `scripts/build-pdf.mjs` via `npm run pdf` (Tasks 1, 10, 11, 13). The five headings `### Problem`, `### Proposed behavior`, `### Acceptance criteria`, `### Out of scope`, `### Your role` are identical in Tasks 3, 4, and the checks in 4 and 14. The quote line format `> "<quote>" — <role>, <file name>` defined in Task 4 is what Task 14's verbatim check parses. The transcript header row `Role` named in Task 5 is what Task 4 Step 2 reads. Persona names, company, sites, and system names are the same across Tasks 5 to 8. Versions are pinned identically in `package.json` (Task 1) and named in the header.
