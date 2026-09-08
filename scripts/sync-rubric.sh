@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Vendor the readiness rubric from kaizen-tasks-assembly-line, or check for drift.
 #
-#   scripts/sync-rubric.sh [ref]             download rubric/readiness.md at <ref> (default main)
+#   scripts/sync-rubric.sh [ref]             download rubric/readiness.md at <ref> (default develop)
 #                                            from GitHub over the local copy
 #   scripts/sync-rubric.sh --local <path>    copy from a local checkout instead of downloading
 #   scripts/sync-rubric.sh --check [ref]     compare the version: lines only; warn on drift; exit 0
@@ -17,7 +17,7 @@ UPSTREAM_PATH="rubric/readiness.md"
 
 check=0
 source_path=""
-ref="main"
+ref="develop"
 
 while [ $# -gt 0 ]; do
   case "$1" in

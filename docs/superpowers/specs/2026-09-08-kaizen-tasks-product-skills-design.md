@@ -80,7 +80,7 @@ Both skills read the vendored rubric and follow its procedure section verbatim, 
 
 ## 4. Rubric sync
 
-`scripts/sync-rubric.sh [ref]` downloads `rubric/readiness.md` from `https://raw.githubusercontent.com/kpnemo/kaizen-tasks-assembly-line/<ref>/rubric/readiness.md` (default `main`) over the local copy. `--check` downloads to a temp file and compares the `version:` lines, printing a warning and exiting 0 when they differ, so CI surfaces drift without blocking. The README tells PMs that engineering owns the rubric and how to pull the latest.
+`scripts/sync-rubric.sh [ref]` downloads `rubric/readiness.md` from `https://raw.githubusercontent.com/kpnemo/kaizen-tasks-assembly-line/<ref>/rubric/readiness.md` (default `develop`) over the local copy. `--check` downloads to a temp file and compares the `version:` lines, printing a warning and exiting 0 when they differ, so CI surfaces drift without blocking. The README tells PMs that engineering owns the rubric and how to pull the latest.
 
 ## 5. Part 3 templates
 

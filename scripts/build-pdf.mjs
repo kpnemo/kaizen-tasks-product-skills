@@ -18,7 +18,7 @@ const jobs = [
     md: 'agentic-layer-canvas.md',
     pdf: 'agentic-layer-canvas.pdf',
     landscape: true,
-    rowHeightMm: 22,
+    rowHeightMm: 26,
   },
   { md: 'plan-30-60-90.md', pdf: 'plan-30-60-90.pdf', landscape: false, rowHeightMm: 14 },
 ];
@@ -47,7 +47,13 @@ function stylesheet(rowHeightMm) {
   `;
 }
 
-const browser = await chromium.launch();
+let browser;
+try {
+  browser = await chromium.launch();
+} catch (err) {
+  console.error('Chromium is missing. Run: npx playwright install chromium');
+  throw err;
+}
 try {
   for (const job of jobs) {
     const markdown = await readFile(path.join(templatesDir, job.md), 'utf8');

@@ -8,7 +8,7 @@ argument-hint: "<issue number | file path | pasted text>"
 
 Take one feature request from a product manager, score it with the shared readiness rubric, ask one question at a time until it would score as ready, and hand back the request rewritten in the form engineering triages. The PM's local score and the engineering triage score come from the same rubric text, so they agree for the same request.
 
-Request source given with the command: `$ARGUMENTS`
+Request source given with the command: `$ARGUMENTS` (if that reads literally as `$ARGUMENTS`, nothing was passed; treat it as no argument)
 
 ## Step 1. Load the rubric
 
@@ -22,6 +22,8 @@ If neither exists, stop and print exactly: `The readiness rubric is missing. Fro
 Take the value of the `version:` line in the rubric's front matter. Print `Rubric version: <value>` as the first line of the reply, and repeat it in the final report.
 
 Follow the rubric's Procedure section (`## 4. Procedure`) as written every time a score is produced. Do not shorten, reorder, or paraphrase it. The rubric's Scales section (`## 1. Scales`, tables `### Clarity`, `### Complexity`, `### Risk`), its Architecture change test (`## 2.`), and its Readiness section (`## 3.`, `readiness = clarity * 2 + (6 - complexity) + (6 - risk)`, range 4 to 20) are the only definitions of clarity, complexity, risk, architecture change, and readiness used here. Produce the rubric's output shape `{ clarity, complexity, risk, archChange, readiness, reasons: { clarity, complexity, risk }, questions: [] }` internally for every score; show it only in the tables below. The rubric's `questions` array (two or three, only while clarity is below 3, from `## 5. Clarifying questions`) is material for the interview in Step 4, not a limit on it: the interview keeps asking one question at a time past clarity 3 until the stop condition in Step 4, up to eight questions.
+
+When the request is about a product other than Kaizen Tasks — the sample PRD and anything drawn from the interview transcripts are — map it to the closest analogous area in the rubric's repo layouts, and say in the complexity and risk reasons that the mapping is by analogy. Never name a file that does not exist.
 
 ## Step 2. Take in the request
 
@@ -118,7 +120,7 @@ Print, in this order:
 
 - If the request came from an issue, `gh` is logged in, and the signed-in login equals the issue's `author.login` (checked in Step 2): ask, through the question tool when available and as a two-item numbered list otherwise, `Update issue #<n> with this body?` with options `Yes, replace the body` and `No, I will paste it myself`. On yes, write the five sections to a temporary file and run `gh issue edit <n> --repo <owner/repo> --body-file <file>` with the repository noted in Step 2, then print the issue URL. Any author can edit their own issue; no repository permission is needed.
 - If the request came from an issue that someone else opened: do not offer the edit. Say `Issue #<n> was opened by <author.login>; only its author can replace its body from here. Paste the five sections into the issue yourself, or into your own tracker.`
-- Otherwise say where to paste it: `Paste the five sections into the Feature request form of the kaizen-tasks-assembly-line repository, or into your own tracker.`
+- Otherwise say where to paste it: `Open <https://github.com/kpnemo/kaizen-tasks-assembly-line/issues/new?template=feature-request.yml> and paste each of the five sections into the field with the same name, or paste the whole body into your own tracker.`
 
 Never apply labels, never comment on the issue, never change its title or state. Labels (`clarity:1..5`, `complexity:1..5`, `risk:1..5`, `arch-change`, `triaged`) and clarifying comments belong to the engineering triage skill.
 

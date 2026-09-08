@@ -5,16 +5,16 @@ Two Claude Code skills for product managers, the readiness rubric engineering sc
 ## Install in three steps
 
 1. Clone: `git clone https://github.com/kpnemo/kaizen-tasks-product-skills.git` and `cd kaizen-tasks-product-skills`.
-2. Open the folder in Claude Code (`claude` from inside it), or add the folder as a project in Cowork or Claude Desktop. If the skills do not appear there, copy the two folders under `skills/` into the app's skills location.
+2. Open the folder in Claude Code (`claude` from inside it), or add the folder as a project in Cowork or Claude Desktop. If the skills do not appear there, copy the two folders under `skills/` into `~/.claude/skills/` for Claude Code, or the Skills folder under Settings → Capabilities in Claude Desktop. If you both install the plugin and open this folder as a project, Claude Code may list each skill twice; either path alone is enough.
 3. Run `/refine-request data/prd-sample.md`.
 
-The skills need no install step. `npm install` is only for rebuilding the PDFs and running the checks.
+The skills need no install step. `npm install` is only for rebuilding the PDFs and running the checks. You need git and Claude Code. `gh` (`brew install gh`, then `gh auth login`) is only needed if you want the skill to read or update a GitHub issue; everything else works without it.
 
 ## The two skills
 
 ### `/refine-request <issue number | file path | pasted text>`
 
-Scores a feature request with the rubric, asks one question at a time until it would score as ready, and returns the request rewritten in the five sections of the engineering issue form with a before-and-after score. Example: `/refine-request data/prd-sample.md`. With an issue number from `kaizen-tasks-assembly-line` (or an issue URL) and a logged-in `gh`, it offers to update your own issue; it never applies labels or comments.
+Scores a feature request with the rubric, asks one question at a time until it would score as ready, and returns the request rewritten in the five sections of the engineering issue form with a before-and-after score. Example: `/refine-request data/prd-sample.md`. With an issue number from `kaizen-tasks-assembly-line` (or an issue URL) and a logged-in `gh`, it offers to update your own issue; it never applies labels or comments. Otherwise, file it yourself at <https://github.com/kpnemo/kaizen-tasks-assembly-line/issues/new?template=feature-request.yml>.
 
 ### `/synthesize-interviews <transcript paths...>`
 

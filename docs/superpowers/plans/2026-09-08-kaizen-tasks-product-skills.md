@@ -39,7 +39,7 @@ How these apply to this repository, which has no application code, no Railway se
 
 - Repo root: `/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills`. Every command below starts with `cd` to that path. The shell must have nvm loaded (`source ~/.nvm/nvm.sh` if `nvm` is not found).
 - Node 24 is not installed on this machine yet (`nvm ls` shows only the system Node 26). Task 1 installs it. After that, run `nvm use` in every new shell before `npm`.
-- Commit with `git commit -F -` and a heredoc so the trailer line are always the last paragraph of the message (shown in each task's commit step).
+- Commit with `git commit -F -` and a heredoc so the trailer line is always the last paragraph of the message (shown in each task's commit step).
 - Branch: commit directly on `develop` and push it at the end of every task with `git push origin develop`. The remote `origin` (`https://github.com/kpnemo/kaizen-tasks-product-skills.git`, default branch `develop`) already exists from L3-M0. Nothing is ever pushed to `main`.
 
 ## File map
