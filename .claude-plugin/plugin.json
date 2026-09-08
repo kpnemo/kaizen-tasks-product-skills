@@ -1,0 +1,13 @@
+{
+  "name": "kaizen-tasks-product-skills",
+  "version": "0.1.0",
+  "description": "Product skills for the Kaizen Tasks workshop: refine a feature request against the engineering readiness rubric, and synthesize customer interviews into ready-to-file requests",
+  "author": {
+    "name": "Mike Bogdanovsky",
+    "url": "https://github.com/kpnemo"
+  },
+  "homepage": "https://github.com/kpnemo/kaizen-tasks-product-skills",
+  "repository": "https://github.com/kpnemo/kaizen-tasks-product-skills",
+  "license": "MIT",
+  "keywords": ["product-management", "feature-requests", "readiness", "customer-interviews", "workshop"]
+}
