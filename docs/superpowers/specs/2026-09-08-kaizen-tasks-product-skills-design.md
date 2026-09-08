@@ -118,7 +118,7 @@ Sections, one page total: what this is; install in three steps (clone, open the 
 
 | # | Check | Status | Fallback |
 |---|---|---|---|
-| P1 | A plugin-shaped repo runs its skills when opened directly as a project in Claude Code | Open, verified in the first task by running `/refine-request` from a fresh clone | Add a `.claude/skills` symlink layer to the same folders |
+| P1 | A plugin-shaped repo runs its skills when opened directly as a project in Claude Code | Verified 2026-09-09 with the fallback: `.claude/skills` symlinks added; clone to refined request in 10 minutes. `/refine-request data/prd-sample.md` ran end to end from the fresh clone (rubric version, before/after table, five-section output). `/synthesize-interviews` loaded from the same clone and its rubric-load and transcript multi-select steps behaved correctly, but its full run to `out/<date>-synthesis.md` did not finish inside this session's headless test window; see task-14-report.md for the manual check Mike should run. | Add a `.claude/skills` symlink layer to the same folders (done) |
 | P2 | The same `SKILL.md` folders load in Claude Desktop and Cowork | Open, verified by Mike before the session | README documents copying the folders into the Desktop skills location |
 | P3 | Playwright PDF rendering runs in CI on Ubuntu without extra fonts | Verified 2026-09-08, run https://github.com/kpnemo/kaizen-tasks-product-skills/actions/runs/34277727419 | Bundle a single open font in the print stylesheet |
 
