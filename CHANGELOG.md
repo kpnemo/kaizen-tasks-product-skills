@@ -16,3 +16,4 @@ All notable changes to this repository are recorded here. The format follows Kee
 - `data/prd-sample.md`: a two-page sample PRD for "Coaching insights" written at clarity 3, the default input for `/refine-request`.
 - Part 3 templates in `templates/part3/`: agentic layer canvas, 30/60/90 plan, and the 45-minute facilitator sheet.
 - `scripts/build-pdf.mjs` renders the canvas (A4 landscape) and the 30/60/90 plan (A4 portrait) to PDF with Playwright's Chromium; the PDFs are committed under `templates/part3/`.
+- README: install in three steps, the two skills with examples, rubric ownership and sync, Part 3 templates, how to propose a skill.
