@@ -19,3 +19,4 @@ All notable changes to this repository are recorded here. The format follows Kee
 - README: install in three steps, the two skills with examples, rubric ownership and sync, Part 3 templates, how to propose a skill.
 - `rubric/readiness.md` vendored from `kaizen-tasks-assembly-line` at version 1, and `scripts/sync-rubric.sh` with `[ref]`, `--local <path>`, and `--check` (warns on drift, never fails).
 - CI workflow `ci` on pull requests and pushes to `main` and `develop`: skill front matter, rubric drift warning, PDF build, markdown and script lint.
+- `.claude/skills` symlinks to the plugin's skill folders so the repository works when opened directly as a project.
