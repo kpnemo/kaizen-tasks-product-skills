@@ -11,3 +11,4 @@ All notable changes to this repository are recorded here. The format follows Kee
 - `refine-request` skill: scores a request with the rubric, interviews one question at a time to readiness, rewrites it in the issue form's five sections, and offers `gh issue edit` for the author's own issue.
 - `synthesize-interviews` skill: transcripts to jobs to be done, pains with verbatim quotes, an opportunity table scored by frequency and severity, and pre-scored candidate requests written to `out/`.
 - Synthetic interview transcript `data/interviews/01-supervisor.md` (team supervisor: coaching prep, per-intent visibility, after-call work backlog).
+- Synthetic interview transcript `data/interviews/02-agent.md` (frontline agent: five tools per interaction, stale knowledge base, arbitrary wrap-up codes).
