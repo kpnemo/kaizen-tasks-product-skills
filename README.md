@@ -22,7 +22,7 @@ Turns interview transcripts into jobs to be done, pains with verbatim quotes, an
 
 ## The rubric
 
-`rubric/readiness.md` is a copy of the rubric engineering owns in [kaizen-tasks-assembly-line](https://github.com/kpnemo/kaizen-tasks-assembly-line/blob/main/rubric/readiness.md). Both skills read it and print its version, so your local score and the engineering triage score agree for the same text. Engineering's triage applies the score labels (`clarity:1..5`, `complexity:1..5`, `risk:1..5`, `arch-change`, `triaged`) to issues; the skills here never do.
+`rubric/readiness.md` is a copy of the rubric engineering owns in [kaizen-tasks-assembly-line](https://github.com/kpnemo/kaizen-tasks-assembly-line/blob/develop/rubric/readiness.md). Both skills read it and print its version, so your local score and the engineering triage score agree for the same text. Engineering's triage applies the score labels (`clarity:1..5`, `complexity:1..5`, `risk:1..5`, `arch-change`, `triaged`) to issues; the skills here never do.
 
 - Pull the latest: `npm run sync-rubric` (or `scripts/sync-rubric.sh [ref]`).
 - Check for drift without changing anything: `scripts/sync-rubric.sh --check`. CI prints a warning on drift and does not fail.

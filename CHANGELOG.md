@@ -23,4 +23,4 @@ All notable changes to this repository are recorded here. The format follows Kee
 
 ### Fixed
 
-- Final review fixes: rubric sync tracks `develop`; 30/60/90 template asks for three commitments; filing URL and analogy rule in the skills; README prerequisites and install locations.
+- Final review fixes: rubric sync tracks `develop`; 30/60/90 template asks for three commitments; filing URL and analogy rule in the skills; README prerequisites and install locations; the README rubric link tracks `develop`.
