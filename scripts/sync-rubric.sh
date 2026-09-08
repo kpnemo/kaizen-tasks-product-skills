@@ -56,7 +56,7 @@ warn() {
 }
 
 version_of() {
-  grep -m1 '^version:' "$1" | sed 's/^version:[[:space:]]*//'
+  grep -m1 '^version:' "$1" | sed 's/^version:[[:space:]]*//' | sed -e 's/[[:space:]]*$//' -e "s/^[\"']//" -e "s/[\"']\$//"
 }
 
 tmp="$(mktemp)"
