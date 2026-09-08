@@ -16,7 +16,6 @@ Every lane plan inherits these. They are copied from the specs and from Mike's s
 
 - Node 24 LTS everywhere, pinned by `.nvmrc` containing `24`; `engines.node` is `>=24 <25`. Run `nvm use` before any npm command.
 - Branching: work on `develop`. Feature branches come off `develop` and merge by pull request. `main` receives only `develop` by pull request after staging verification. Nothing is ever pushed to `main` directly. `develop` is the default branch on GitHub.
-- Commit messages end with the two trailer lines `Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>` and `Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ`.
 - Secrets never enter a repository. `ANTHROPIC_API_KEY`, `JWT_SECRET`, `ADMIN_TOKEN`, `SEED_DEMO_PASSWORD`, and any GitHub token live only in Railway variables and in git-ignored local `.env` files. Mike pastes them.
 - Railway: only the new project `kaizen-tasks`. Never link to, modify, or redeploy any other project in the account. Railway operations follow the official `use-railway` skill.
 - GitHub: repos `kpnemo/kaizen-tasks-api`, `kpnemo/kaizen-tasks-web`, `kpnemo/kaizen-tasks-assembly-line`, `kpnemo/kaizen-tasks-product-skills`, all public.
@@ -40,7 +39,7 @@ How these apply to this repository, which has no application code, no Railway se
 
 - Repo root: `/Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills`. Every command below starts with `cd` to that path. The shell must have nvm loaded (`source ~/.nvm/nvm.sh` if `nvm` is not found).
 - Node 24 is not installed on this machine yet (`nvm ls` shows only the system Node 26). Task 1 installs it. After that, run `nvm use` in every new shell before `npm`.
-- Commit with `git commit -F -` and a heredoc so the two trailer lines are always the last paragraph of the message (shown in each task's commit step).
+- Commit with `git commit -F -` and a heredoc so the trailer line are always the last paragraph of the message (shown in each task's commit step).
 - Branch: commit directly on `develop` and push it at the end of every task with `git push origin develop`. The remote `origin` (`https://github.com/kpnemo/kaizen-tasks-product-skills.git`, default branch `develop`) already exists from L3-M0. Nothing is ever pushed to `main`.
 
 ## File map
@@ -343,7 +342,6 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 chore: scaffold repository with npm scripts and skill front matter check
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
 /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
@@ -424,7 +422,6 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 feat: add plugin manifest
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
 /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
@@ -622,7 +619,6 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 feat: add refine-request skill
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
 /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
@@ -803,7 +799,6 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 feat: add synthesize-interviews skill
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
 /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
@@ -1153,7 +1148,6 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 feat: add synthetic supervisor interview transcript
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
 /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
@@ -1499,7 +1493,6 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 feat: add synthetic agent interview transcript
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
 /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
@@ -1853,7 +1846,6 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 feat: add synthetic workforce planner interview transcript
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
 /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
@@ -1976,7 +1968,6 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 feat: add sample PRD at clarity 3
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
 /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
@@ -2145,7 +2136,6 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 feat: add Part 3 canvas, plan, and facilitator templates
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
 /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
@@ -2339,7 +2329,6 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 feat: build Part 3 PDFs with Playwright Chromium
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
 /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
@@ -2439,7 +2428,6 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 docs: add README for product managers
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
 /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
@@ -2678,7 +2666,6 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 feat: vendor readiness rubric with sync and drift check script
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
 /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
@@ -2784,7 +2771,6 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 ci: add workflow with front matter, rubric drift, PDF, and lint checks
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
 /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
@@ -2812,7 +2798,6 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 docs: record P3 verification from the first CI run
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
 /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
@@ -2889,7 +2874,6 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 fix: add .claude/skills symlink layer so skills load when the repo is opened directly
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
 /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
@@ -2936,7 +2920,6 @@ cd /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skill
 docs: record P1 verification from a fresh clone
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01HWmLNo9LBp2SgKdYisfRoJ
 MSG
 /Users/Mike.Bogdanovsky/Projects/nice-product-workshop-Sep.2026/product-skills && git push origin develop
 ```
