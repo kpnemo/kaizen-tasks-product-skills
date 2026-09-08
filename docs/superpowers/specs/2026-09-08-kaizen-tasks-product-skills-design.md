@@ -120,7 +120,7 @@ Sections, one page total: what this is; install in three steps (clone, open the 
 |---|---|---|---|
 | P1 | A plugin-shaped repo runs its skills when opened directly as a project in Claude Code | Open, verified in the first task by running `/refine-request` from a fresh clone | Add a `.claude/skills` symlink layer to the same folders |
 | P2 | The same `SKILL.md` folders load in Claude Desktop and Cowork | Open, verified by Mike before the session | README documents copying the folders into the Desktop skills location |
-| P3 | Playwright PDF rendering runs in CI on Ubuntu without extra fonts | Open, verified by the first CI run | Bundle a single open font in the print stylesheet |
+| P3 | Playwright PDF rendering runs in CI on Ubuntu without extra fonts | Verified 2026-09-08, run https://github.com/kpnemo/kaizen-tasks-product-skills/actions/runs/34277727419 | Bundle a single open font in the print stylesheet |
 
 ## 10. Out of scope
 
