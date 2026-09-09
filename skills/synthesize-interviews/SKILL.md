@@ -5,7 +5,7 @@ description: Turn customer interview transcripts into jobs, pains with quotes, o
 
 # Synthesize customer interviews
 
-Usage: `/synthesize-interviews <transcript paths...>`
+Usage: `/synthesize-interviews <transcript paths...>`. With no argument, or paths that do not exist, offer the bundled transcripts in `samples/` next to this SKILL.md; in claude.ai, Claude Desktop and Cowork the user may paste text or attach a file instead, and that always takes precedence over the samples.
 
 Read one or more interview transcripts and produce what a product manager needs to act on them: jobs to be done, pains backed by verbatim quotes, opportunities ranked by how many people have the pain and how badly it hurts, and two or three feature requests written in the form engineering triages, each pre-scored with the shared readiness rubric.
 
@@ -27,8 +27,8 @@ When the request is about a product other than Kaizen Tasks — the sample PRD a
 
 ## Step 2. Collect the transcripts
 
-- If paths were given, read every one. For a path that does not exist, say which one and continue with the rest; if none remain, stop.
-- If no paths were given, offer the bundled transcripts. Resolve the folder the same way as the rubric: `${CLAUDE_PLUGIN_ROOT}/data/interviews/` or `data/interviews/`. When the AskUserQuestion tool is available, ask `Which transcripts should I synthesize?` with multi-select on and one option per file, labelled with the file name and the persona from its header; in plain text otherwise, list them with numbers and say that the default is all of them. Proceed with the chosen files; with no choice, all of them.
+- If paths were given, read every one. For a path that does not exist, say which one and continue with the rest; if none remain, treat it as no paths given and fall through to the next bullet.
+- If no paths were given, or none of the given paths exist: look for the bundled transcripts in `samples/` next to this SKILL.md, list them, and offer to run on them. In claude.ai, Claude Desktop and Cowork the user may instead paste transcript text or attach files; pasted or attached text always takes precedence over the samples. When the AskUserQuestion tool is available, ask `Which transcripts should I synthesize?` with multi-select on and one option per file, labelled with the file name and the persona from its header; in plain text otherwise, list them with numbers and say that the default is all of them. Proceed with the chosen files; with no choice, all of them.
 - For each transcript, record its file name and the value of the `Role` row in its header table. Quotes are attributed by that role and file name. If a transcript has no header table, use the speaker's name as it appears in the transcript, or `unknown role`.
 
 Print `Transcripts: <file names, comma separated>`.

@@ -69,4 +69,62 @@ for f in "${files[@]}"; do
     status=1
   fi
 done
+
+# Sample inputs bundled under skills/<name>/samples/ (so a ZIP upload to
+# claude.ai, Claude Desktop or Cowork has something to run Part 2 on) must
+# stay byte-identical to the originals under data/, which remain the path
+# Claude Code users read. Bash 3.2 (macOS default) has no associative
+# arrays, so the copy-to-original mapping is two parallel indexed arrays.
+SAMPLE_COPIES=(
+  "skills/refine-request/samples/prd-sample.md"
+  "skills/synthesize-interviews/samples/01-supervisor.md"
+  "skills/synthesize-interviews/samples/02-agent.md"
+  "skills/synthesize-interviews/samples/03-workforce-planner.md"
+)
+SAMPLE_ORIGINALS=(
+  "data/prd-sample.md"
+  "data/interviews/01-supervisor.md"
+  "data/interviews/02-agent.md"
+  "data/interviews/03-workforce-planner.md"
+)
+
+i=0
+while [ "$i" -lt "${#SAMPLE_COPIES[@]}" ]; do
+  copy="${SAMPLE_COPIES[$i]}"
+  original="${SAMPLE_ORIGINALS[$i]}"
+  i=$((i + 1))
+  if [ ! -f "$original" ]; then
+    echo "FAIL: $original is missing (expected source for $copy)"
+    status=1
+    continue
+  fi
+  if [ ! -f "$copy" ]; then
+    echo "FAIL: samples out of sync: copy $original to $copy"
+    status=1
+    continue
+  fi
+  if ! cmp -s "$original" "$copy"; then
+    echo "FAIL: samples out of sync: copy $original to $copy"
+    status=1
+  else
+    echo "ok: $copy matches $original"
+  fi
+done
+
+# Catch a sample file added under skills/*/samples/ without a matching entry
+# above, so the mapping can't silently go stale.
+while IFS= read -r found; do
+  known=0
+  for copy in "${SAMPLE_COPIES[@]}"; do
+    if [ "$found" = "$copy" ]; then
+      known=1
+      break
+    fi
+  done
+  if [ "$known" -eq 0 ]; then
+    echo "FAIL: $found has no known original in scripts/check-skills.sh; add it to SAMPLE_COPIES/SAMPLE_ORIGINALS"
+    status=1
+  fi
+done < <(find skills -type f -path '*/samples/*' | sort)
+
 exit "$status"

@@ -76,7 +76,8 @@ version_of() {
 check_in_skill_drift() {
   local status=0
   if [ ! -f "$LOCAL_RUBRIC" ]; then
-    return 0
+    echo "error: rubric/readiness.md is missing; run scripts/sync-rubric.sh" >&2
+    return 1
   fi
   local skill_rubric name
   for skill_rubric in "${IN_SKILL_RUBRICS[@]}"; do
@@ -126,7 +127,8 @@ fi
 if [ "$check" -eq 1 ]; then
   if [ ! -f "$LOCAL_RUBRIC" ]; then
     warn "rubric/readiness.md is missing locally; upstream is version $upstream_version. Run scripts/sync-rubric.sh"
-    exit 0
+    check_in_skill_drift
+    exit "$?"
   fi
   local_version="$(version_of "$LOCAL_RUBRIC" || true)"
   if [ "$local_version" = "$upstream_version" ]; then
