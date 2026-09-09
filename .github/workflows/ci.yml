@@ -21,7 +21,7 @@ jobs:
       - name: Skill front matter
         run: npm test
 
-      - name: Rubric drift (warns, never fails)
+      - name: Rubric drift (warns on upstream drift; fails if an in-skill copy is stale)
         run: bash scripts/sync-rubric.sh --check
 
       - name: Build PDFs

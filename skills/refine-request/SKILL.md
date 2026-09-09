@@ -1,10 +1,11 @@
 ---
 name: refine-request
 description: Interview me about a feature request until it is ready for engineering, then rewrite it in the request form
-argument-hint: "<issue number | file path | pasted text>"
 ---
 
 # Refine a feature request
+
+Usage: `/refine-request <issue number | file path | pasted text>`
 
 Take one feature request from a product manager, score it with the shared readiness rubric, ask one question at a time until it would score as ready, and hand back the request rewritten in the form engineering triages. The PM's local score and the engineering triage score come from the same rubric text, so they agree for the same request.
 
@@ -14,10 +15,11 @@ Request source given with the command: `$ARGUMENTS` (if that reads literally as 
 
 Read the rubric before reading the request. Look in this order and use the first file that exists:
 
-1. `${CLAUDE_PLUGIN_ROOT}/rubric/readiness.md` when the `CLAUDE_PLUGIN_ROOT` environment variable is set (the plugin is installed).
-2. `rubric/readiness.md` under the project root, the folder that contains `skills/refine-request/` (the repository is opened directly).
+1. `readiness.md` in the same folder as this SKILL.md (the copy that travels with the skill when it is uploaded as a ZIP).
+2. `${CLAUDE_PLUGIN_ROOT}/rubric/readiness.md` when the `CLAUDE_PLUGIN_ROOT` environment variable is set (the plugin is installed).
+3. `rubric/readiness.md` under the project root, the folder that contains `skills/refine-request/` (the repository is opened directly).
 
-If neither exists, stop and print exactly: `The readiness rubric is missing. From the repo root run scripts/sync-rubric.sh, then run /refine-request again.` Do not score without the rubric.
+If none exists, stop and print exactly: `The readiness rubric is missing. From the repo root run scripts/sync-rubric.sh, then run /refine-request again.` Do not score without the rubric.
 
 Take the value of the `version:` line in the rubric's front matter. Print `Rubric version: <value>` as the first line of the reply, and repeat it in the final report.
 

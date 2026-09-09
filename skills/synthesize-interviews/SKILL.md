@@ -1,10 +1,11 @@
 ---
 name: synthesize-interviews
 description: Turn customer interview transcripts into jobs, pains with quotes, opportunities, and ready-to-file feature requests
-argument-hint: "<transcript paths...>"
 ---
 
 # Synthesize customer interviews
+
+Usage: `/synthesize-interviews <transcript paths...>`
 
 Read one or more interview transcripts and produce what a product manager needs to act on them: jobs to be done, pains backed by verbatim quotes, opportunities ranked by how many people have the pain and how badly it hurts, and two or three feature requests written in the form engineering triages, each pre-scored with the shared readiness rubric.
 
@@ -14,10 +15,11 @@ Transcript paths given with the command: `$ARGUMENTS` (if that reads literally a
 
 Read the rubric before the transcripts. Look in this order and use the first file that exists:
 
-1. `${CLAUDE_PLUGIN_ROOT}/rubric/readiness.md` when the `CLAUDE_PLUGIN_ROOT` environment variable is set.
-2. `rubric/readiness.md` under the project root, the folder that contains `skills/synthesize-interviews/`.
+1. `readiness.md` in the same folder as this SKILL.md (the copy that travels with the skill when it is uploaded as a ZIP).
+2. `${CLAUDE_PLUGIN_ROOT}/rubric/readiness.md` when the `CLAUDE_PLUGIN_ROOT` environment variable is set.
+3. `rubric/readiness.md` under the project root, the folder that contains `skills/synthesize-interviews/`.
 
-If neither exists, stop and print exactly: `The readiness rubric is missing. From the repo root run scripts/sync-rubric.sh, then run /synthesize-interviews again.`
+If none exists, stop and print exactly: `The readiness rubric is missing. From the repo root run scripts/sync-rubric.sh, then run /synthesize-interviews again.`
 
 Take the value of the `version:` line in the rubric's front matter. Print `Rubric version: <value>` as the first line of the reply and write it into the output file. When scoring a candidate request in Step 5, follow the rubric's Procedure section (`## 4. Procedure`) as written and produce its output shape `{ clarity, complexity, risk, archChange, readiness, reasons: { clarity, complexity, risk }, questions: [] }` internally; the rubric's Scales section (`## 1. Scales`, tables `### Clarity`, `### Complexity`, `### Risk`), its Architecture change test (`## 2.`), and its Readiness section (`## 3.`, `readiness = clarity * 2 + (6 - complexity) + (6 - risk)`, range 4 to 20) are the only definitions used.
 
