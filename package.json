@@ -1,0 +1,32 @@
+{
+  "name": "kaizen-tasks-product-skills",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Product skills for the Kaizen Tasks workshop: refine-request, synthesize-interviews, the readiness rubric, and the Part 3 templates",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "pdf": "node scripts/build-pdf.mjs",
+    "sync-rubric": "bash scripts/sync-rubric.sh",
+    "package": "bash scripts/package-skills.sh",
+    "lint": "npm run lint:md && npm run lint:js",
+    "lint:md": "markdownlint-cli2 \"README.md\" \"templates/**/*.md\"",
+    "lint:js": "prettier --check --no-error-on-unmatched-pattern \"scripts/**/*.mjs\" eslint.config.js && eslint .",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "bash scripts/check-skills.sh"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "24.13.3",
+    "eslint": "10.10.0",
+    "globals": "17.12.0",
+    "markdownlint-cli2": "0.23.2",
+    "marked": "18.0.12",
+    "playwright": "1.63.0",
+    "prettier": "3.9.6",
+    "typescript": "5.9.3"
+  }
+}

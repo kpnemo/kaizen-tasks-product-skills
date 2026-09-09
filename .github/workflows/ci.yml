@@ -1,0 +1,38 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Skill front matter
+        run: npm test
+
+      - name: Rubric drift (warns on upstream drift; fails if an in-skill copy is stale)
+        run: bash scripts/sync-rubric.sh --check
+
+      - name: Build PDFs
+        run: |
+          npx playwright install --with-deps chromium
+          npm run pdf
+          for f in templates/part3/agentic-layer-canvas.pdf templates/part3/plan-30-60-90.pdf; do
+            test -s "$f" || { echo "missing or empty: $f"; exit 1; }
+          done
+
+      - name: Markdown lint, script lint, typecheck
+        run: |
+          npm run lint
+          npm run typecheck

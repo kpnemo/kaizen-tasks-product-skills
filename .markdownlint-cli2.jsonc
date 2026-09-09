@@ -1,0 +1,13 @@
+{
+  // MD013 (line length) is off because table rows are long.
+  // MD033 (inline HTML) is off in case a template cell needs a <br>.
+  // MD060 (table column style, new in markdownlint 0.41) is off because the
+  // print templates use compact pipes and empty cells on purpose.
+  "config": {
+    "default": true,
+    "MD013": false,
+    "MD033": false,
+    "MD060": false
+  },
+  "ignores": ["node_modules/**", "out/**"]
+}
