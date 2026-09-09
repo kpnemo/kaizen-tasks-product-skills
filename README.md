@@ -2,13 +2,13 @@
 
 Two Claude Code skills for product managers, the readiness rubric engineering scores requests with, the Part 3 planning templates, and synthetic data so everything runs without customer material. Built for the Kaizen Tasks workshop and packaged as a Claude Code plugin, so it can go to the company marketplace later without restructuring.
 
-## Install in three steps
+## Install
 
-1. Clone: `git clone https://github.com/kpnemo/kaizen-tasks-product-skills.git` and `cd kaizen-tasks-product-skills`.
-2. Open the folder in Claude Code (`claude` from inside it), or add the folder as a project in Cowork or Claude Desktop. If the skills do not appear there, copy the two folders under `skills/` into `~/.claude/skills/` for Claude Code, or the Skills folder under Settings → Capabilities in Claude Desktop. If you both install the plugin and open this folder as a project, Claude Code may list each skill twice; either path alone is enough.
-3. Run `/refine-request data/prd-sample.md`.
+**Claude Code**: clone `https://github.com/kpnemo/kaizen-tasks-product-skills.git`, `cd` into it, and run `claude` from inside the folder; the skills load from `.claude/skills/`. Or install it as a plugin from the company marketplace once it is published there; either path alone is enough, since installing both makes Claude Code list each skill twice. Then run `/refine-request data/prd-sample.md`.
 
-The skills need no install step. `npm install` is only for rebuilding the PDFs and running the checks. You need git and Claude Code. `gh` (`brew install gh`, then `gh auth login`) is only needed if you want the skill to read or update a GitHub issue; everything else works without it.
+**claude.ai, Claude Desktop and Cowork**: run `npm run package` to build `dist/refine-request.zip` and `dist/synthesize-interviews.zip`. In claude.ai, open Customize > Skills, click "+", then "+ Create skill", and upload `dist/refine-request.zip`; repeat for `dist/synthesize-interviews.zip`. The skills then appear in Claude Desktop and Cowork sessions signed in to the same account (they sync at session start). Each ZIP carries its own copy of the rubric and a `samples/` folder, so the score matches engineering's triage for the same text and Part 2 has something to run on with no local checkout. Run `/refine-request` with no argument and pick the bundled sample, or paste your own request; for interviews run `/synthesize-interviews` and pick the bundled transcripts, or attach your own. `npm run package` needs Node/npm as well; without them run `bash scripts/package-skills.sh` directly.
+
+The skills need no install step beyond the above. Prerequisites, common to both paths: git. Packaging (`npm run package`) also needs bash and `zip`, both already on macOS; `npm install` is not needed for packaging. Node and npm are only needed for the checks (`npm test`) and for rebuilding the PDFs (`npm run pdf`). `gh` (`brew install gh`, then `gh auth login`) is only needed if you want the skill to read or update a GitHub issue; everything else works without it.
 
 ## The two skills
 
@@ -24,8 +24,10 @@ Turns interview transcripts into jobs to be done, pains with verbatim quotes, an
 
 `rubric/readiness.md` is a copy of the rubric engineering owns in [kaizen-tasks-assembly-line](https://github.com/kpnemo/kaizen-tasks-assembly-line/blob/develop/rubric/readiness.md). Both skills read it and print its version, so your local score and the engineering triage score agree for the same text. Engineering's triage applies the score labels (`clarity:1..5`, `complexity:1..5`, `risk:1..5`, `arch-change`, `triaged`) to issues; the skills here never do.
 
-- Pull the latest: `npm run sync-rubric` (or `scripts/sync-rubric.sh [ref]`).
-- Check for drift without changing anything: `scripts/sync-rubric.sh --check`. CI prints a warning on drift and does not fail.
+Each skill also carries its own copy, `skills/<name>/readiness.md`, so a skill uploaded to claude.ai as a ZIP of its own folder — which has neither `rubric/` nor `${CLAUDE_PLUGIN_ROOT}` — still finds a rubric. `scripts/sync-rubric.sh` keeps all three copies (`rubric/readiness.md` and the two in-skill copies) in sync; never edit any of them by hand.
+
+- Pull the latest: `npm run sync-rubric` (or `scripts/sync-rubric.sh [ref]`). This updates `rubric/readiness.md` and both in-skill copies together.
+- Check for drift without changing anything: `scripts/sync-rubric.sh --check`. CI warns on drift against the upstream repo and does not fail on that, but does fail if either in-skill copy no longer matches `rubric/readiness.md`.
 
 ## Part 3 templates
 
@@ -33,7 +35,7 @@ Turns interview transcripts into jobs to be done, pains with verbatim quotes, an
 
 ## Propose a new skill
 
-Open a pull request against `develop` that adds `skills/<name>/SKILL.md` with `name` (equal to the folder name) and `description` in its front matter, and one example under "The two skills" above. `npm test` checks the front matter; CI runs it.
+Open a pull request against `develop` that adds `skills/<name>/SKILL.md` with `name` (equal to the folder name) and `description` in its front matter, and one example under "The two skills" above. `npm test` checks the front matter: `name` and `description` are required, and no field outside claude.ai's upload spec (`name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`) may appear. CI runs it.
 
 ## After the session
 

@@ -6,6 +6,7 @@ All notable changes to this repository are recorded here. The format follows Kee
 
 ### Added
 
+- `scripts/package-skills.sh` (`npm run package`): zips each `skills/<name>/` folder to `dist/<name>.zip`, unpacking to `<name>/SKILL.md` and `<name>/readiness.md`, ready to upload to claude.ai.
 - Repository scaffold: Node 24 pin, npm scripts `pdf`, `sync-rubric`, `lint`, `typecheck`, `test`, markdown lint, Prettier, ESLint flat config, `checkJs` strict, and the skill front matter check.
 - Plugin manifest `.claude-plugin/plugin.json` so the repository loads as a Claude Code plugin.
 - `refine-request` skill: scores a request with the rubric, interviews one question at a time to readiness, rewrites it in the issue form's five sections, and offers `gh issue edit` for the author's own issue.
@@ -23,4 +24,6 @@ All notable changes to this repository are recorded here. The format follows Kee
 
 ### Fixed
 
+- Skills upload to claude.ai, Claude Desktop and Cowork: `argument-hint` removed from the front matter (the upload rejects any field outside the Agent Skills spec) and each skill folder carries its own `readiness.md`, kept in sync by `scripts/sync-rubric.sh`; `npm run package` builds the two ZIPs.
 - Final review fixes: rubric sync tracks `develop`; 30/60/90 template asks for three commitments; filing URL and analogy rule in the skills; README prerequisites and install locations; the README rubric link tracks `develop`.
+- The ZIP-installed skills carry the sample PRD and the three synthetic transcripts under `samples/` and offer them when no input is given; the drift check fails when the canonical rubric is missing.

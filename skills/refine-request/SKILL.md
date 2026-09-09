@@ -1,10 +1,11 @@
 ---
 name: refine-request
 description: Interview me about a feature request until it is ready for engineering, then rewrite it in the request form
-argument-hint: "<issue number | file path | pasted text>"
 ---
 
 # Refine a feature request
+
+Usage: `/refine-request <issue number | file path | pasted text>`. With no argument, or a path that does not exist, offer the bundled samples in `samples/` next to this SKILL.md; in claude.ai, Claude Desktop and Cowork the user may paste text or attach a file instead, and that always takes precedence over the samples.
 
 Take one feature request from a product manager, score it with the shared readiness rubric, ask one question at a time until it would score as ready, and hand back the request rewritten in the form engineering triages. The PM's local score and the engineering triage score come from the same rubric text, so they agree for the same request.
 
@@ -14,10 +15,11 @@ Request source given with the command: `$ARGUMENTS` (if that reads literally as 
 
 Read the rubric before reading the request. Look in this order and use the first file that exists:
 
-1. `${CLAUDE_PLUGIN_ROOT}/rubric/readiness.md` when the `CLAUDE_PLUGIN_ROOT` environment variable is set (the plugin is installed).
-2. `rubric/readiness.md` under the project root, the folder that contains `skills/refine-request/` (the repository is opened directly).
+1. `readiness.md` in the same folder as this SKILL.md (the copy that travels with the skill when it is uploaded as a ZIP).
+2. `${CLAUDE_PLUGIN_ROOT}/rubric/readiness.md` when the `CLAUDE_PLUGIN_ROOT` environment variable is set (the plugin is installed).
+3. `rubric/readiness.md` under the project root, the folder that contains `skills/refine-request/` (the repository is opened directly).
 
-If neither exists, stop and print exactly: `The readiness rubric is missing. From the repo root run scripts/sync-rubric.sh, then run /refine-request again.` Do not score without the rubric.
+If none exists, stop and print exactly: `The readiness rubric is missing. From the repo root run scripts/sync-rubric.sh, then run /refine-request again.` Do not score without the rubric.
 
 Take the value of the `version:` line in the rubric's front matter. Print `Rubric version: <value>` as the first line of the reply, and repeat it in the final report.
 
@@ -30,11 +32,11 @@ When the request is about a product other than Kaizen Tasks — the sample PRD a
 Decide the source from the text after the command, checking in this order:
 
 1. **Only digits** (for example `17`), or a GitHub issue URL (`https://github.com/<owner>/<repo>/issues/<n>`): a GitHub issue. Digits alone mean an issue in `kpnemo/kaizen-tasks-assembly-line`, where feature requests are filed. Run `gh auth status` first. If `gh` is not installed or not logged in, say so in one line and ask for the issue text to be pasted instead. Otherwise run `gh issue view <n> --repo kpnemo/kaizen-tasks-assembly-line --json title,body,author,url` (or `gh issue view <url> --json title,body,author,url` for a URL) and use `title` and `body` as the request. Then run `gh api user -q .login` and note whether it equals `author.login`. Remember the issue number, its repository, and that yes-or-no answer for Step 6.
-2. **A path to an existing file** (for example `data/prd-sample.md` or `~/requests/export.md`): read the file and use its contents as the request.
-3. **Anything else**: the text itself is the request.
-4. **Nothing**: ask `Paste the request, or give me an issue number or a file path.` and wait. Then apply the three rules above to the reply.
+2. **A path to an existing file** (for example `data/prd-sample.md` or `~/requests/export.md`): read the file and use its contents as the request. If the text looks like a file path (contains a `/`, starts with `~` or `.`, or ends in a file extension) but no such file exists, treat it as case 4 below instead of case 3.
+3. **Anything else**: the text itself is the request. In claude.ai, Claude Desktop and Cowork the user may instead paste the request text directly into the chat or attach a file; either always takes precedence over the bundled samples below.
+4. **Nothing, or a path that does not exist**: look for the bundled samples in `samples/` next to this SKILL.md, list them, and offer to run on one of them. When the AskUserQuestion tool is available, ask through it; otherwise list them as a numbered list in plain text. If the user instead pastes text or attaches a file, use that and skip the samples. With no samples found either, ask `Paste the request, or give me an issue number or a file path.` and wait. Then apply the rules above to the reply.
 
-Print one line naming the source: `Request source: issue #17`, `Request source: data/prd-sample.md`, or `Request source: pasted text`.
+Print one line naming the source: `Request source: issue #17`, `Request source: data/prd-sample.md`, `Request source: samples/prd-sample.md`, or `Request source: pasted text`.
 
 ## Step 3. Score before
 

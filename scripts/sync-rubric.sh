@@ -2,9 +2,13 @@
 # Vendor the readiness rubric from kaizen-tasks-assembly-line, or check for drift.
 #
 #   scripts/sync-rubric.sh [ref]             download rubric/readiness.md at <ref> (default develop)
-#                                            from GitHub over the local copy
+#                                            from GitHub over the local copy, then copy it into
+#                                            each skill folder (skills/<name>/readiness.md) so a
+#                                            skill uploaded as a ZIP carries its own rubric
 #   scripts/sync-rubric.sh --local <path>    copy from a local checkout instead of downloading
 #   scripts/sync-rubric.sh --check [ref]     compare the version: lines only; warn on drift; exit 0
+#                                            also fails if either in-skill copy differs from
+#                                            rubric/readiness.md
 #   scripts/sync-rubric.sh --check --local <path>
 #
 # Engineering owns the rubric. This script only copies it; never edit rubric/readiness.md here.
@@ -14,6 +18,12 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOCAL_RUBRIC="$REPO_ROOT/rubric/readiness.md"
 UPSTREAM_REPO="kpnemo/kaizen-tasks-assembly-line"
 UPSTREAM_PATH="rubric/readiness.md"
+# Skills carry their own copy of the rubric so a skill uploaded to claude.ai
+# as a ZIP of its own folder (no rubric/, no ${CLAUDE_PLUGIN_ROOT}) still has one.
+IN_SKILL_RUBRICS=(
+  "$REPO_ROOT/skills/refine-request/readiness.md"
+  "$REPO_ROOT/skills/synthesize-interviews/readiness.md"
+)
 
 check=0
 source_path=""
@@ -59,6 +69,32 @@ version_of() {
   grep -m1 '^version:' "$1" | sed 's/^version:[[:space:]]*//' | sed -e 's/[[:space:]]*$//' -e "s/^[\"']//" -e "s/[\"']\$//"
 }
 
+# The in-skill copies must match rubric/readiness.md exactly (not just by
+# version), since that is the file a ZIP upload actually carries. This check
+# needs no network access, so it always runs in --check mode and is a hard
+# failure, unlike the upstream drift warning (which never fails).
+check_in_skill_drift() {
+  local status=0
+  if [ ! -f "$LOCAL_RUBRIC" ]; then
+    echo "error: rubric/readiness.md is missing; run scripts/sync-rubric.sh" >&2
+    return 1
+  fi
+  local skill_rubric name
+  for skill_rubric in "${IN_SKILL_RUBRICS[@]}"; do
+    name="$(basename "$(dirname "$skill_rubric")")"
+    if [ ! -f "$skill_rubric" ]; then
+      echo "error: skills/$name/readiness.md is missing; run scripts/sync-rubric.sh" >&2
+      status=1
+      continue
+    fi
+    if ! cmp -s "$LOCAL_RUBRIC" "$skill_rubric"; then
+      echo "error: skills/$name/readiness.md is out of date; run scripts/sync-rubric.sh" >&2
+      status=1
+    fi
+  done
+  return "$status"
+}
+
 tmp="$(mktemp)"
 trap 'rm -f "$tmp"' EXIT
 
@@ -74,7 +110,8 @@ else
   if ! curl -fsSL "$origin" -o "$tmp"; then
     if [ "$check" -eq 1 ]; then
       warn "rubric drift check skipped: could not download $origin"
-      exit 0
+      check_in_skill_drift
+      exit "$?"
     fi
     echo "error: could not download $origin" >&2
     exit 1
@@ -90,7 +127,8 @@ fi
 if [ "$check" -eq 1 ]; then
   if [ ! -f "$LOCAL_RUBRIC" ]; then
     warn "rubric/readiness.md is missing locally; upstream is version $upstream_version. Run scripts/sync-rubric.sh"
-    exit 0
+    check_in_skill_drift
+    exit "$?"
   fi
   local_version="$(version_of "$LOCAL_RUBRIC" || true)"
   if [ "$local_version" = "$upstream_version" ]; then
@@ -98,9 +136,16 @@ if [ "$check" -eq 1 ]; then
   else
     warn "rubric drift: local version ${local_version:-none}, upstream version $upstream_version. Run scripts/sync-rubric.sh"
   fi
-  exit 0
+  check_in_skill_drift
+  exit "$?"
 fi
 
 mkdir -p "$(dirname "$LOCAL_RUBRIC")"
 cp "$tmp" "$LOCAL_RUBRIC"
 echo "rubric/readiness.md updated to version $upstream_version from $origin"
+
+for skill_rubric in "${IN_SKILL_RUBRICS[@]}"; do
+  mkdir -p "$(dirname "$skill_rubric")"
+  cp "$LOCAL_RUBRIC" "$skill_rubric"
+  echo "${skill_rubric#"$REPO_ROOT"/} updated to version $upstream_version"
+done

@@ -11,6 +11,7 @@
   "scripts": {
     "pdf": "node scripts/build-pdf.mjs",
     "sync-rubric": "bash scripts/sync-rubric.sh",
+    "package": "bash scripts/package-skills.sh",
     "lint": "npm run lint:md && npm run lint:js",
     "lint:md": "markdownlint-cli2 \"README.md\" \"templates/**/*.md\"",
     "lint:js": "prettier --check --no-error-on-unmatched-pattern \"scripts/**/*.mjs\" eslint.config.js && eslint .",
